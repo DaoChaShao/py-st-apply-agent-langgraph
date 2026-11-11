@@ -5,6 +5,9 @@
 
 ### Features
 
+- **agents:** add parser categories and unspecified priority ([bcba99b](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/bcba99bd9a33f812f436e9540c0fa8584ee45d24))
+- **agents:** add CV parsing to employment document parser ([de27357](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/de27357820dcf07c12a05ce9ada11e95ef6373e9))
+- **models:** add CV-related models and field descriptions ([bd50e52](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/bd50e52c4fbddbe6090fc6b08f4e47980c3e3bb5))
 - **utils:** add StrEnum type definitions for ML components ([dffdb2e](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/dffdb2ec00885ec72ad00ec1e41343ad2d46d505))
 - **stats:** add enum types for stats module ([a31b7eb](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/a31b7eb6e2f6c476ea7d324edc66dba62ff5f8c0))
 - **dbk:** add SQLAlchemy session init utility ([53f8e00](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/53f8e0076df298cdfc34260575a47c411b3f1e71))
@@ -33,6 +36,11 @@
 
 ### Chore
 
+- **deps:** add sqlalchemy dependency to lock file ([47c345d](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/47c345d254f4df51bcc666561f622aeeb4b0e48d))
+- **deps:** add sqlalchemy>=2.1.8 dependency ([2047861](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/20478615d0779e594fb3a586df206543b7a72387))
+- **stats:** add .gitignore file for Python project ([e6f3bda](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/e6f3bda5f046950ca05ea6b99c3573ac748e9958))
+- **data:** add .gitignore for Python project artifacts ([ee640a0](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/ee640a07beb37668b3514759e45efee58c7982bc))
+- **agents:** add .gitignore for Python project configuration ([ffb0640](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/ffb06407353a1393fd27f46a734c8e99f87b167d))
 - **utils:** add .gitignore for Python project files ([ee38a0d](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/ee38a0da4c6dd30a8a75db276645844e6a757c2a))
 - **utils/dbk:** add .gitignore for Python project ([b92381d](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/b92381d76afc5f3dbbd627245df0af6f9140621a))
 - **deps:** add new project dependencies ([9f81d5c](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/9f81d5c64ec1e642ceee5b5d5dcf03133513afba))
@@ -42,7 +50,14 @@
 
 ### Docs
 
+- **changelog:** update 0.1.0 release entries ([59ffdc3](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/59ffdc355e27ab1bdf7990a48deb53a87b94aafd))
 - **changelog:** update 0.1.0 release entries with new features ([881cb31](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/881cb31e3fba1a0e763a09dc641ff5a3d850dc8b))
 - **changelog:** add version 0.1.0 release changelog ([7af4829](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/7af4829636ddcca7448932cd9dc848dfe6e83167))
 - **readme:** add Chinese README documentation ([4f9d6de](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/4f9d6de4fc75ea3599ae957f8852c7f854577aab))
 - **readme:** add comprehensive project README file ([2ef3cb4](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/2ef3cb45ac8a500d8ad7600bb59a6a8f95e3d645))
+
+### Code Refactoring
+
+- **models:** replace Exercise model with Resume/Education ([6cc6fa7](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/6cc6fa7ed7c6d60e8df8cc792ec065d481d7859b))
+- **access:** unify attribute access control ([4ec17dc](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/4ec17dc222919629164f58fcbdf3d0e8e7028bb4))
+- **agents:** rename JobParser to EmploymentDocParser ([9544d59](https://github.com/DaoChaShao/py-st-apply-agent-langgraph/commit/9544d59940b7837123caf42e8f20495d9fef7e74))
