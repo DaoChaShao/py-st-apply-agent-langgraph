@@ -7,11 +7,10 @@
 # @Desc     :
 
 from datetime import datetime
-from datetime import time as date_time
 from typing import Annotated
 
-from sqlalchemy import DateTime, Float, Integer, String, Time
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DateTime, Float, Integer, String, Text, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
 from .base import DECLARATION
@@ -19,76 +18,82 @@ from .base import DECLARATION
 
 class GEN:
     PK = Annotated[int, mapped_column(Integer, nullable=False, primary_key=True)]
-    CONTENT = Annotated[str, mapped_column(String(50), nullable=False)]
     CT = Annotated[datetime, mapped_column(DateTime, nullable=False, server_default=func.now())]
     UT = Annotated[datetime, mapped_column(DateTime, nullable=False, server_default=func.now(), onupdate=func.now())]
+    STR = Annotated[str, mapped_column(String(100), nullable=True)]
+    NUM = Annotated[float, mapped_column(Float, nullable=True)]
+    TXT = Annotated[str, mapped_column(Text, nullable=True)]
 
 
-class Exercise(DECLARATION):
-    """ Exercise Model """
+class ResumeEducation(DECLARATION):
+    """ Resume Education Association Model """
+    __tablename__ = "resume_education"
 
-    __tablename__ = "exercise"
+    resume_id: Mapped[int] = mapped_column(ForeignKey("resume.id"), primary_key=True)
+    education_id: Mapped[int] = mapped_column(ForeignKey("education.id"), primary_key=True)
+
+
+class Education(DECLARATION):
+    """ Education Model """
+    __tablename__ = "education"
 
     id: Mapped[GEN.PK]
 
-    # Exercise Date and time
-    date: Mapped[datetime] = mapped_column(DateTime, nullable=False)
-    time: Mapped[date_time] = mapped_column(Time, nullable=False)
-    week: Mapped[str] = mapped_column(String(10), nullable=False)
-    type: Mapped[str] = mapped_column(String(10), nullable=False, default="J")
-
-    # Exercise Index
-    slope: Mapped[float] = mapped_column(Float, nullable=True)
-    duration: Mapped[float] = mapped_column(Float, nullable=True)
-    distance: Mapped[float] = mapped_column(Float, nullable=False, default=5.0)
-    active_kilocalories: Mapped[float] = mapped_column(Float, nullable=True)
-    total_kilocalories: Mapped[float] = mapped_column(Float, nullable=True)
-    avg_cadence: Mapped[int] = mapped_column(Integer, nullable=True)
-    avg_pace: Mapped[float] = mapped_column(Float, nullable=True)
-    avg_heart_rate: Mapped[int] = mapped_column(Integer, nullable=True)
-    effort: Mapped[int] = mapped_column(Integer, nullable=True)
-
-    # Heart Rate Zones
-    zone_i: Mapped[float] = mapped_column(Float, nullable=True)
-    zone_ii: Mapped[float] = mapped_column(Float, nullable=True)
-    zone_iii: Mapped[float] = mapped_column(Float, nullable=True)
-    zone_iv: Mapped[float] = mapped_column(Float, nullable=True)
-    zone_v: Mapped[float] = mapped_column(Float, nullable=True)
-
-    # Heart Rate Recovery
-    post_heart_rate_i: Mapped[int] = mapped_column(Integer, nullable=True)
-    post_heart_rate_ii: Mapped[int] = mapped_column(Integer, nullable=True)
-    post_heart_rate_iii: Mapped[int] = mapped_column(Integer, nullable=True)
-
-    # Body Weight
-    weight: Mapped[float] = mapped_column(Float, nullable=True)
-
-    # ACWR (Acute-Chronic Workload Ratio) - RPE (Rate of Perceived Exertion): Training Intensity
-    rpe: Mapped[int] = mapped_column(Integer, nullable=True)
+    institution: Mapped[GEN.STR]
+    degree: Mapped[GEN.STR]
+    field_of_study: Mapped[GEN.STR]
+    graduation_date: Mapped[GEN.STR]
 
     create_date: Mapped[GEN.CT]
     update_date: Mapped[GEN.UT]
 
+    # Explicit Display
+    resume: Mapped[list["Resume"]] = relationship(
+        lazy="selectin",
+        back_populates="education",
+        secondary="resume_education",
+    )
+
+    def __repr__(self) -> str:
+        """ Return a string representation of the Education object """
+        return (
+            f"<Education("
+            f"id={self.id}, "
+            f"institution={self.institution}, "
+            f"degree={self.degree}, "
+            f"field_of_study={self.field_of_study}, "
+            f"graduation_date={self.graduation_date}, "
+            f"create_date={self.create_date},"
+            f"update_date={self.update_date}>"
+        )
+
+
+class Resume(DECLARATION):
+    """ Resume Model """
+    __tablename__ = "resume"
+
+    id: Mapped[GEN.PK]
+
+    category: Mapped[GEN.STR]
+    summary: Mapped[GEN.TXT]
+
+    create_date: Mapped[GEN.CT]
+    update_date: Mapped[GEN.UT]
+
+    # Explicit Display
+    education: Mapped[list["Education"]] = relationship(
+        lazy="selectin",
+        back_populates="resume",
+        secondary="resume_education",
+    )
+
     def __repr__(self) -> str:
         """ Return a string representation of the Exercise object """
         return (
-            f"<Exercise("
+            f"<Resume("
             f"id={self.id}, "
-            f"date={self.date}, time={self.time}, week={self.week}, "
-            f"type={self.type}, "
-            f"slope={self.slope}, duration={self.duration}, distance={self.distance}, "
-            f"active_kilocalories={self.active_kilocalories}, total_kilocalories={self.total_kilocalories}, "
-            f"avg_cadence={self.avg_cadence}, avg_pace={self.avg_pace}, avg_heart_rate={self.avg_heart_rate}, "
-            f"effort={self.effort}, "
-            f"zone_i={self.zone_i}, "
-            f"zone_ii={self.zone_ii}, "
-            f"zone_iii={self.zone_iii}, "
-            f"zone_iv={self.zone_iv}, "
-            f"zone_v={self.zone_v}, "
-            f"post_heart_rate_i={self.post_heart_rate_i}, "
-            f"post_heart_rate_ii={self.post_heart_rate_ii}, "
-            f"post_heart_rate_iii={self.post_heart_rate_iii}, "
-            f"weight={self.weight}, "
-            f"create_date={self.create_date}, update_date={self.update_date}, "
-            f"rpe={self.rpe}>"
+            f"category={self.category}, "
+            f"summary={self.summary}, "
+            f"create_date={self.create_date},"
+            f"update_date={self.update_date}>"
         )
