@@ -20,7 +20,7 @@ __author__ = "Shawn Yu"
 __version__ = "0.1.0"
 
 from .services import (
-    JobParser,
+    EmploymentDocParser,
     init_deepseek,
     init_openai,
     load_yaml,
@@ -30,12 +30,13 @@ from .types import (
     JobRequirementPriorities,
     ModelCategories,
     ModelOutputMethods,
+    ParserCategories,
     ResumeCategories,
     ResumeComponents,
 )
 
 __all__ = [
-    "JobParser",
+    "EmploymentDocParser",
     "init_deepseek",
     "init_openai",
     "load_yaml",
@@ -44,6 +45,7 @@ __all__ = [
     "JobRequirementPriorities",
     "ModelOutputMethods",
     "ModelCategories",
+    "ParserCategories",
     "ResumeCategories",
     "ResumeComponents",
 ]
