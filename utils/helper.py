@@ -16,37 +16,80 @@ from .constants import WIDTH
 
 
 class Access:
+    """ Controlling access to attributes """
+
+    def _assess_access(self, attr: str, operation: str) -> None:
+        """
+        Check whether an attribute operation is permitted.
+
+        :param attr: The attribute name
+        :param operation: The operation being performed
+        :raises AttributeError: If access is denied
+        """
+        if attr.startswith("__") and attr.endswith("__"):
+            return
+        if not attr.startswith("_"):
+            return
+
+        frame = currentframe()
+        try:
+            # _check_access -> __getattribute__/__setattr__/__delattr__ -> caller
+            caller = frame.f_back.f_back if frame is not None and frame.f_back is not None else None
+            if caller is not None:
+                caller_self = caller.f_locals.get("self")
+
+                if caller_self is self:
+                    return
+        finally:
+            del frame
+
+        raise AttributeError(
+            f"[Access Denied] "
+            f"{type(self).__name__!r} object attribute "
+            f"{attr!r} is private and cannot be {operation} externally!"
+        )
 
     @override
-    def __getattribute__(self, attr: str) -> object | Any:
+    def __getattribute__(self, attr: str) -> Any:
         """
         Override __getattribute__ to control attribute access
 
         :param attr: The attribute name to access
         :return: The attribute value if accessible, otherwise raise AttributeError
         """
-        if attr.startswith("__") and attr.endswith("__"):
-            return super().__getattribute__(attr)
+        value = super().__getattribute__(attr)
 
-        if not attr.startswith("_"):
-            return super().__getattribute__(attr)
+        if callable(value):
+            return value
 
-        _value = super().__getattribute__(attr)
+        checker = object.__getattribute__(self, "_assess_access")
+        checker(attr, "accessed")
+        return value
 
-        if callable(_value):
-            return _value
+    @override
+    def __setattr__(self, attr: str, value: Any) -> None:
+        """
+        Override __setattr__ to control attribute assignment.
 
-        _frame = currentframe().f_back
-        if _frame is not None:
-            _caller_self = _frame.f_locals.get("self")
-            if _caller_self is self:
-                return _value
+        :param attr: The attribute name to assign
+        :param value: The value to assign
+        :raises AttributeError: If access is denied
+        """
+        checker = object.__getattribute__(self, "_assess_access")
+        checker(attr, "modified")
+        super().__setattr__(attr, value)
 
-        raise AttributeError(
-            f"[Access Denied] "
-            f"{type(self).__name__!r} object attribute "
-            f"{attr!r} is private and cannot be accessed externally!"
-        )
+    @override
+    def __delattr__(self, attr: str) -> None:
+        """
+        Override __delattr__ to control attribute deletion.
+
+        :param attr: The attribute name to delete
+        :raises AttributeError: If access is denied
+        """
+        checker = object.__getattribute__(self, "_assess_access")
+        checker(attr, "deleted")
+        super().__delattr__(attr)
 
 
 class Beautifier:
