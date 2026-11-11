@@ -23,6 +23,7 @@ class JobRequirementCategories(StrEnum):
 class JobRequirementPriorities(StrEnum):
     REQUIRED = "required"
     PREFERRED = "preferred"
+    UNSPECIFIED = "unspecified"
 
 
 @unique
@@ -45,6 +46,12 @@ class ResumeCategories(StrEnum):
     EDUCATION_TRAINING = "education_training"
     MANAGEMENT = "management"
     SPORTS = "sports"
+
+
+@unique
+class ParserCategories(StrEnum):
+    CURRICULUM_VITAE = "cv"
+    JOB_DESCRIPTION = "jd"
 
 
 @unique
